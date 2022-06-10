@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import GifItem from '../../component/GifItem';
+import Giflist from '../../component/GifList';
+import Searchbar from '../../component/SearchBar';
 import { searchGiphy, trendingGiphy } from '../../services/Giphy';
+
+export const SearchContext = React.createContext()
 
 const Index = () => {
 
@@ -42,22 +46,22 @@ const Index = () => {
 
             </div>
 
-            <div className='row'>
+            <div className='row g-3'>
                 <div className='col-lg-12'>
-                    <input type="text" className='form-control mb-4' onChange={(e) => setKeyword(e.target.value)} placeholder="Search Gif by Keyword" />
+                    <SearchContext.Provider value={{
+                        setKeyword
+                    }}>
+                        <Searchbar />
+                    </SearchContext.Provider>
+
                 </div>
 
-                {loading ? 
+                {loading ?
                     <div>
                         <p>Loading....</p>
                     </div>
-                    : <div className='row'>
-                        {listGiphy.map((item) =>
-                            <div className='col-lg-4 col-md-4 col-6'>
-                                <GifItem urlGiphy={item.images.original.url} />
-                            </div>
-                        )}
-                    </div>}
+                    : <Giflist listData={listGiphy} />
+                }
 
 
             </div>
